@@ -2,6 +2,7 @@ package jp.techacademy.yoshiyuki.suganuma.jumpactiongame
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.ScreenAdapter
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
@@ -51,6 +52,7 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
     private var mScore: Int
     private var mHighScore: Int
     private var mPrefs: Preferences // ←追加する
+    private var mSound: Sound
 
     init {
         // 背景の準備
@@ -77,6 +79,9 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
         mEnemys = ArrayList<Enemy>()
         mGameState = GAME_STATE_READY
         mTouchPoint = Vector3()
+
+        //効果音ファイルの定義
+        mSound = Gdx.audio.newSound(Gdx.files.internal("data/monster9.mp3"))
 
         mFont = BitmapFont(Gdx.files.internal("font.fnt"), Gdx.files.internal("font.png"), false)
         mFont.data.setScale(0.8f)
@@ -180,7 +185,7 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
 
             if (mRandom.nextFloat() > 0.8f) {
                 val enemy = Enemy(enemyTexture, 0, 0, 72, 72)
-                enemy.setPosition(step.x + mRandom.nextFloat(), step.y + Enemy.ENEMY_HEIGHT + mRandom.nextFloat() * 3)
+                enemy.setPosition(enemy.x + mRandom.nextFloat(), enemy.y + Enemy.ENEMY_HEIGHT + mRandom.nextFloat() * 3)
                 mEnemys.add(enemy)
             }
 
@@ -217,6 +222,7 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
 
     private fun updatePlaying(delta: Float) {
         var accel = 0f
+
         if (Gdx.input.isTouched) {
             mGuiViewPort.unproject(mTouchPoint.set(Gdx.input.x.toFloat(), Gdx.input.y.toFloat(), 0f))
             val left = Rectangle(0f, 0f, GUI_WIDTH / 2, GUI_HEIGHT)
@@ -232,6 +238,11 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
         // Step
         for (i in 0 until mSteps.size) {
             mSteps[i].update(delta)
+        }
+
+        // Enemy
+        for (i in 0 until mEnemys.size) {
+            mEnemys[i].update(delta)
         }
 
         // Player
@@ -285,11 +296,11 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
         // Enemyとの当たり判定
         for (i in 0 until mEnemys.size) {
             val enemy = mEnemys[i]
-            val sound = Gdx.audio.newSound(Gdx.files.internal("data/monster9.mp3"))
+
 
             if (mPlayer.boundingRectangle.overlaps(enemy.boundingRectangle)) {
                 //敵に当たったら効果音を出す
-                sound.play(1.0f)
+                mSound.play(1.0f)
                 //敵と当たったらゲームオーバー
                 Gdx.app.log("JampActionGame", "GAMEOVER")
                 mGameState = GAME_STATE_GAMEOVER
