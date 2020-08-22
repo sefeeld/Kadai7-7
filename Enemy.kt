@@ -24,32 +24,18 @@ class Enemy(texture: Texture, srcX: Int, srcY: Int, srcWidth: Int, srcHeight: In
     // 座標を更新する
     fun update(deltaTime: Float) {
 
-            x += velocity.x * deltaTime
+        x += velocity.x * deltaTime
 
-            if (x < Enemy.ENEMY_WIDTH / 2) {
-                velocity.x = -velocity.x
-                x = Enemy.ENEMY_WIDTH / 2
-            }
-            if (x > GameScreen.WORLD_WIDTH - Enemy.ENEMY_WIDTH / 2) {
-                velocity.x = -velocity.x
-                x = GameScreen.WORLD_WIDTH - Enemy.ENEMY_WIDTH / 2
-            }
-
-    }
-
-
-
- /*   // 座標を更新する
-    fun update(deltaTime: Float) {
-            x += 2.0f * deltaTime
-
-        if (x + Enemy.ENEMY_WIDTH / 2 < 0) {
+        if (x < Enemy.ENEMY_WIDTH / 2) {
+            velocity.x = -velocity.x
+            x = Enemy.ENEMY_WIDTH / 2
+        }
+        if (x > GameScreen.WORLD_WIDTH - Enemy.ENEMY_WIDTH / 2) {
+            velocity.x = -velocity.x
             x = GameScreen.WORLD_WIDTH - Enemy.ENEMY_WIDTH / 2
-        } else if (2.0f + Enemy.ENEMY_WIDTH / 2 > GameScreen.WORLD_WIDTH) {
-            x = 0f
         }
 
     }
-*/
+
 
 }

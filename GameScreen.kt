@@ -185,7 +185,7 @@ class GameScreen(private val mGame: JumpActionGame) : ScreenAdapter() {
 
             if (mRandom.nextFloat() > 0.8f) {
                 val enemy = Enemy(enemyTexture, 0, 0, 72, 72)
-                enemy.setPosition(enemy.x + mRandom.nextFloat(), enemy.y + Enemy.ENEMY_HEIGHT + mRandom.nextFloat() * 3)
+                enemy.setPosition(step.x + mRandom.nextFloat(), step.y + Enemy.ENEMY_HEIGHT + mRandom.nextFloat() * 3)
                 mEnemys.add(enemy)
             }
 
